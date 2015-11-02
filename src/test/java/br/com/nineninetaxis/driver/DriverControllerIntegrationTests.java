@@ -42,10 +42,7 @@ public class DriverControllerIntegrationTests extends AbstractTest {
     private static final String STATUS_PATH = BASE_PATH.concat("/%s/status");
     private static final String IN_AREA_PATH = BASE_PATH.concat("/inArea?sw=%s&ne=%s");
 
-    private static final String HTML_DATA = "<div><name>%s</name><carPlate>%s</carPlate></div>";
-    private static final String JSON_DATA = "{\"name\":\"%s\", \"carPlate\": \"%s\"}";
-    private static final String XML_DATA = "<xml><name>%s</name><carPlate>%s</carPlate></name>";
-    private static final String FORM_DATA = "name=%s&carPlate=%s";
+    private static final String DRIVER_JSON_DATA = "{\"name\":\"%s\", \"carPlate\": \"%s\"}";
     private static final String STATUS_JSON_DATA = "{\"driverAvailable\":\"%s\", \"latitude\": \"%s\", \"longitude\": \"%s\"}";
 
     @Before
@@ -72,48 +69,33 @@ public class DriverControllerIntegrationTests extends AbstractTest {
         return response.path(String.format("[%d].driverId", total - 1));
     }
 
-    private ValidatableResponse updateDriver(Integer id, String data) {
+    private ValidatableResponse updateDriver(Integer id, String data, ContentType type) {
         Response put = given().
                 body(data).
-                contentType(ContentType.JSON).
+                contentType(type).
                 when().
                 put(String.format(STATUS_PATH, id));
         return put.then();
     }
 
     @Test
-    public void testCreateWithEmptyData() {
+    public void testCreate() {
+        String data = String.format(DRIVER_JSON_DATA, NAME_PARAM, PLATE_PARAM);
+
         createDriver("{}", ContentType.JSON).
                 statusCode(HttpStatus.SC_PRECONDITION_FAILED);
-    }
 
-    @Test
-    public void testCreateWithWrongCarPlateFormat() {
-        createDriver(String.format(JSON_DATA, NAME_PARAM, "XXX121"), ContentType.JSON).
+        createDriver(String.format(DRIVER_JSON_DATA, NAME_PARAM, "XXX121"), ContentType.JSON).
                 statusCode(HttpStatus.SC_PRECONDITION_FAILED);
-    }
 
-    @Test
-    public void testCreateWithHTMLData() {
-        createDriver(String.format(HTML_DATA, NAME_PARAM, PLATE_PARAM), ContentType.HTML).
+        createDriver(String.format(DRIVER_JSON_DATA, NAME_PARAM, PLATE_PARAM), ContentType.HTML).
                 statusCode(HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE);
-    }
 
-    @Test
-    public void testCreateWithXMLData() {
-        createDriver(String.format(XML_DATA, NAME_PARAM, PLATE_PARAM), ContentType.XML).
+        createDriver(String.format(DRIVER_JSON_DATA, NAME_PARAM, PLATE_PARAM), ContentType.XML).
                 statusCode(HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE);
-    }
 
-    @Test
-    public void testCreateWithFormData() {
-        createDriver(String.format(FORM_DATA, NAME_PARAM, PLATE_PARAM), ContentType.URLENC).
+        createDriver(String.format(DRIVER_JSON_DATA, NAME_PARAM, PLATE_PARAM), ContentType.URLENC).
                 statusCode(HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE);
-    }
-
-    @Test
-    public void testCreate() {
-        String data = String.format(JSON_DATA, NAME_PARAM, PLATE_PARAM);
 
         createDriver(data, ContentType.JSON).
                 statusCode(HttpStatus.SC_OK);
@@ -141,15 +123,30 @@ public class DriverControllerIntegrationTests extends AbstractTest {
     @Test
     public void testUpdateDriverStatus() {
 
-        createDriver(String.format(JSON_DATA, "TestUpdate", "TUP-0000"), ContentType.JSON).
+        createDriver(String.format(DRIVER_JSON_DATA, "TestUpdate", "TUP-0000"), ContentType.JSON).
                 statusCode(HttpStatus.SC_OK);
 
         Integer id = lastDriver();
 
-        updateDriver(id, String.format(JSON_DATA, NAME_PARAM, PLATE_PARAM)).
+        updateDriver(id, "{}", ContentType.JSON).
                 statusCode(HttpStatus.SC_PRECONDITION_FAILED);
 
-        updateDriver(id, String.format(STATUS_JSON_DATA, AVAILABILITY_PARAM, LATITUDE_PARAM, LONGITUDE_PARAM)).
+        updateDriver(id, String.format(DRIVER_JSON_DATA, NAME_PARAM, "XXX121"), ContentType.JSON).
+                statusCode(HttpStatus.SC_PRECONDITION_FAILED);
+
+        updateDriver(id, String.format(DRIVER_JSON_DATA, NAME_PARAM, PLATE_PARAM), ContentType.HTML).
+                statusCode(HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE);
+
+        updateDriver(id, String.format(DRIVER_JSON_DATA, NAME_PARAM, PLATE_PARAM), ContentType.XML).
+                statusCode(HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE);
+
+        updateDriver(id, String.format(DRIVER_JSON_DATA, NAME_PARAM, PLATE_PARAM), ContentType.URLENC).
+                statusCode(HttpStatus.SC_UNSUPPORTED_MEDIA_TYPE);
+
+        updateDriver(id, String.format(DRIVER_JSON_DATA, NAME_PARAM, PLATE_PARAM), ContentType.JSON).
+                statusCode(HttpStatus.SC_PRECONDITION_FAILED);
+
+        updateDriver(id, String.format(STATUS_JSON_DATA, AVAILABILITY_PARAM, LATITUDE_PARAM, LONGITUDE_PARAM), ContentType.JSON).
                 statusCode(HttpStatus.SC_OK);
 
         String path = String.format(STATUS_PATH, id);
@@ -195,12 +192,12 @@ public class DriverControllerIntegrationTests extends AbstractTest {
                 body("$.size()", equalTo(0));
 
 
-        createDriver(String.format(JSON_DATA, "TestSearchInArea", "TIA-0000"), ContentType.JSON).
+        createDriver(String.format(DRIVER_JSON_DATA, "TestSearchInArea", "TIA-0000"), ContentType.JSON).
                 statusCode(HttpStatus.SC_OK);
 
         Integer id = lastDriver();
 
-        updateDriver(id, String.format(STATUS_JSON_DATA, AVAILABILITY_PARAM, IN_LATITUDE_PARAM, IN_LONGITUDE_PARAM)).
+        updateDriver(id, String.format(STATUS_JSON_DATA, AVAILABILITY_PARAM, IN_LATITUDE_PARAM, IN_LONGITUDE_PARAM), ContentType.JSON).
                 statusCode(HttpStatus.SC_OK);
 
         when().
