@@ -1,4 +1,4 @@
-package br.com.nineninetaxis.driver.test;
+package br.com.nineninetaxis.driver.util;
 
 import geodb.GeoDB;
 import org.springframework.jdbc.datasource.SingleConnectionDataSource;

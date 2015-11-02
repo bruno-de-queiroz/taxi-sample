@@ -1,6 +1,6 @@
 package br.com.nineninetaxis.driver.config;
 
-import br.com.nineninetaxis.driver.test.GeoDBInMemoryDataSource;
+import br.com.nineninetaxis.driver.util.GeoDBInMemoryDataSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
