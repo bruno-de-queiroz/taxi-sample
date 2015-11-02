@@ -1,29 +1,21 @@
-package br.com.nineninetaxis.config;
+package br.com.nineninetaxis.driver.config;
 
+import br.com.nineninetaxis.driver.web.CoordinateConverter;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.PrecisionModel;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.validation.Validator;
 import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
-import org.springframework.web.servlet.LocaleResolver;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.i18n.SessionLocaleResolver;
-
-import java.util.Locale;
-
 
 /**
  * Created by Bruno de Queiroz<creativelikeadog@gmail.com>
  */
 @Configuration
 public class DriverConfig extends WebMvcConfigurerAdapter {
-
-    @Bean
-    public LocaleResolver localeResolver() {
-        SessionLocaleResolver slr = new SessionLocaleResolver();
-        slr.setDefaultLocale(Locale.getDefault());
-        return slr;
-    }
 
     @Bean
     public ReloadableResourceBundleMessageSource messageSource() {
@@ -40,8 +32,19 @@ public class DriverConfig extends WebMvcConfigurerAdapter {
         return factory;
     }
 
+    @Bean
+    public GeometryFactory geometryFactory() {
+        return new GeometryFactory(new PrecisionModel(), 26910);
+    }
+
     @Override
     public Validator getValidator() {
         return validator();
+    }
+
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addConverter(new CoordinateConverter());
     }
 }

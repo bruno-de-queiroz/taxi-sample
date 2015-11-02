@@ -22,6 +22,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <java.version>1.8</java.version>
+        <restassured.version>2.6.0</restassured.version>
     </properties>
 
     <dependencies>
@@ -34,12 +35,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-hateoas</artifactId>
         </dependency>
-        
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
-        </dependency>
 
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -47,6 +42,21 @@
             <version>4.3</version>
         </dependency>
 
+        <!-- H2 -->
+        <dependency>
+            <groupId>com.h2database</groupId>
+            <artifactId>h2</artifactId>
+            <version>1.4.190</version>
+            <scope>runtime</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.opengeo</groupId>
+            <artifactId>geodb</artifactId>
+            <version>0.8</version>
+        </dependency>
+
+        <!-- POSTGIS -->
         <dependency>
             <groupId>org.postgis</groupId>
             <artifactId>postgis-jdbc</artifactId>
@@ -59,6 +69,15 @@
             <version>9.4-1201-jdbc41</version>
             <scope>runtime</scope>
         </dependency>
+
+        <!-- TESTING -->
+        <dependency>
+            <groupId>com.jayway.restassured</groupId>
+            <artifactId>rest-assured</artifactId>
+            <version>${restassured.version}</version>
+            <scope>test</scope>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -80,6 +99,12 @@
             <id>OSGEO GeoTools repo</id>
             <url>http://download.osgeo.org/webdav/geotools</url>
         </repository>
+
+        <repository>
+            <id>Boundless Maven Repository</id>
+            <url>http://repo.boundlessgeo.com/main/</url>
+        </repository>
+
         <repository>
             <id>Hibernate Spatial repo</id>
             <url>http://www.hibernatespatial.org/repository</url>

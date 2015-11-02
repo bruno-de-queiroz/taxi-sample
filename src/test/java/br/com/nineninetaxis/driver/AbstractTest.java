@@ -1,16 +1,15 @@
-package br.com.nineninetaxis;
+package br.com.nineninetaxis.driver;
 
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.SpringApplicationConfiguration;
+import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
+/**
+ * @Author Bruno de Queiroz<creativelikeadog@gmail.com>
+ */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(classes = DriverApplication.class)
-public class DriverApplicationTests {
-
-    @Test
-    public void contextLoads() {
-    }
-
+@ActiveProfiles("test")
+public abstract class AbstractTest {
 }
