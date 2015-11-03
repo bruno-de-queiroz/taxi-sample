@@ -1,4 +1,7 @@
 *.class
+bundle/
+maven/
+tmp/
 target/
 .mvn/
 .idea/

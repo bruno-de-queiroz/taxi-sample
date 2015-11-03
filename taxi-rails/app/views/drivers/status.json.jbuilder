@@ -1,0 +1,1 @@
+json.partial! 'drivers/status', driver: @driver

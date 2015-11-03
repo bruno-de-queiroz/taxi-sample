@@ -1,0 +1,1 @@
+json.array! @drivers, partial: 'drivers/status', as: :driver

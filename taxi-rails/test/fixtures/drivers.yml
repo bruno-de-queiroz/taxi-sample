@@ -1,0 +1,10 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+create:
+  name: Teste
+  carPlate: TST-0000
+  driverAvailable: true
+
+update:
+  name: Teste Update
+  carPlate: TUP-0000
