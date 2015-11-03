@@ -11,30 +11,21 @@ nginx:
         - /var/run/docker.sock:/tmp/docker.sock
 
 spring:
-    image: maven:3.3-jdk-8
-    command: "mvn spring-boot:run"
+    build: ./taxi-spring-boot
     ports:
-        - '80'
+        - '8080'
     links:
         - postgis
-    volumes:
-        - ./maven:/root/.m2
-        - ./taxi-spring-boot:/app
-    working_dir: /app
     environment:
         - VIRTUAL_HOST=spring.taxiapp.com
+        - VIRTUAL_PORT=8080
 
 rails:
-    image: rails:latest
-    command: "rails server -b 0.0.0.0"
+    build: ./taxi-rails
     ports:
         - '3000'
     links:
         - postgis
-    volumes:
-        - ./bundle:/usr/local/bundle
-        - ./taxi-rails:/app/taxi-rails
-    working_dir: /app/taxi-rails
     environment:
         - VIRTUAL_HOST=rails.taxiapp.com
-        - VIRTUAL_POST=3000
+        - VIRTUAL_PORT=3000

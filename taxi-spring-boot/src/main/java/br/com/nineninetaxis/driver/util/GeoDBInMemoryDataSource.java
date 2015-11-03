@@ -10,7 +10,7 @@ public class GeoDBInMemoryDataSource extends SingleConnectionDataSource {
 
     public GeoDBInMemoryDataSource() {
         setDriverClassName("org.h2.Driver");
-        setUrl("jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=TRUE");
+        setUrl("jdbc:h2:mem:testdb;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE");
         setSuppressClose(true);
     }
 
